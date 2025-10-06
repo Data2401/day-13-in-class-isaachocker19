@@ -1,0 +1,165 @@
+---
+title: "Join Lab"
+author: "Dr. Shoemaker"
+date: "DATA 2401"
+output: html_document
+---
+
+
+# Joins and `dplyr` practice
+
+## Dataset 1
+
+We start by making some "healthcare" data: 
+
+```{r}
+# Patients table
+patients <- tibble(
+  patient_id = c(1, 2, 3, 4),
+  name = c("Alice", "Bob", "Charlie", "David"),
+  age = c(25, 40, 35, 50),
+  sex = c("F", "M", "F", "M")
+)
+
+# Visits table (Some patients have multiple visits, some missing)
+visits <- tibble(
+  visit_id = c(101, 102, 103, 104, 105),
+  patient_id = c(1, 2, 2, 3, 5),  
+  doctor_id = c(201, 202, 201, 203, 204),
+  visit_date = as.Date(c("2024-01-10", "2024-01-12", "2024-02-15", "2024-03-01", "2024-03-10"))
+)
+
+# Doctors table (Some doctors may not have treated any patients)
+doctors <- tibble(
+  doctor_id = c(201, 202, 203, 205),
+  doctor_name = c("Dr. Smith", "Dr. Johnson", "Dr. Lee", "Dr. Brown"),
+  specialty = c("Cardiology", "Neurology", "Pediatrics", "Orthopedics")
+)
+
+```
+
+Questions: 
+
+- Find the names of patients who have visited the hospital. 
+- Show all patients visit information, even if they haven't visited the hospital
+- List all the visits and patient information, even if there isn't information for the patient
+- Show all visits with their assigned doctors.
+- Find the doctor(s) that Bob has met with. 
+- Find patients that haven't visited the hospital
+
+```{r}
+
+```
+
+## Dataset 2
+
+Load the `"nycflights13"` package.  You'll also need to load `dplyr` or `tidyverse`, if you didn't above.
+
+```{r}
+library(tidyverse)
+#install.packages("nycflights13")
+library(nycflights13)
+my_flights <- flights # store my own version
+my_flights <- na.omit(my_flights) ## this dataset has data on cancelled flights too, 
+                                  ## so we 'll remove those for now
+
+```
+
+
+Create a dataframe of the average arrival delays for each _destination_
+
+```{r}
+
+```
+
+Then use `left_join()` to join on the "airports" dataframe, which has the airport information.
+
+```{r}
+
+```
+
+
+Note here: the column names don't match anymore! 
+
+Which airport had the largest average arrival delay?
+
+```{r}
+
+```
+
+
+
+What is the average departure delay for each airline? To answer this with something more than just the FAA code of the airline name, you need to create a dataframe of the average departure delay for each _airline_, then use `left_join()` to join on the "airlines" dataframe
+
+
+```{r}
+
+
+````
+
+Which airline had the smallest average departure delay? 
+
+
+
+```{r}
+
+
+
+```
+
+
+Add origin and destination airport names (two joins to the same table)
+Question: Which origin–destination pair has the highest average arrival delay?
+
+
+```{r}
+
+
+
+``` 
+
+Which airline (name) has the highest on-time rate? Are left_join and inner_join returning the same rows here? Why?
+
+
+```{r}
+
+
+
+```
+
+Plane metadata join: age of aircraft vs. delays
+Among aircraft with at least 50 flights, which tailnumber has the largest average arrival delay, and what are the manufacturer/model and age?
+
+
+```{r}
+
+
+
+```
+
+## Extra Examples from R4DS:    
+
+```{r}
+
+top_dest <- flights %>%
+  count(dest, sort = TRUE) %>%
+  head(10)
+top_dest
+
+```
+
+Now you want to find each flight that went to one of those destinations. You could, of course, filter. But! Now you can semi-join: 
+
+```{r}
+flights %>% 
+  semi_join(top_dest)
+```
+
+
+What does anti_join(flights, airports, by = c("dest" = "faa")) tell you? What does anti_join(airports, flights, by = c("faa" = "dest")) tell you?
+Perform the two joins below and consider what the results **are**. 
+
+```{r}
+
+```
+
